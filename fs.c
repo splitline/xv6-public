@@ -231,6 +231,10 @@ iupdate(struct inode *ip)
   dip->minor = ip->minor;
   dip->nlink = ip->nlink;
   dip->size = ip->size;
+
+  dip->owner = ip->owner;
+  dip->group = ip->group;
+  dip->permission = ip->permission;
   memmove(dip->addrs, ip->addrs, sizeof(ip->addrs));
   log_write(bp);
   brelse(bp);
@@ -304,6 +308,10 @@ ilock(struct inode *ip)
     ip->minor = dip->minor;
     ip->nlink = dip->nlink;
     ip->size = dip->size;
+
+    ip->owner = dip->owner;
+    ip->group = dip->group;
+    ip->permission = dip->permission;
     memmove(ip->addrs, dip->addrs, sizeof(ip->addrs));
     brelse(bp);
     ip->valid = 1;
@@ -445,6 +453,10 @@ stati(struct inode *ip, struct stat *st)
   st->type = ip->type;
   st->nlink = ip->nlink;
   st->size = ip->size;
+
+  st->owner = ip->owner;
+  st->group = ip->group;
+  st->permission = ip->permission;
 }
 
 //PAGEBREAK!

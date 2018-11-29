@@ -23,6 +23,11 @@ struct inode {
   short nlink;
   uint size;
   uint addrs[NDIRECT+1];
+  
+  // permission attributes
+  short owner;
+  short group;
+  short permission;
 };
 
 // table mapping major device number to
