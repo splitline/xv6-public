@@ -488,25 +488,26 @@ sys_chmod(void)
 int
 checkPermission(const struct inode *id, int identity, int binary)
 {
-	int rwx;
+	int rwx=-1;
 	int permission = id->permission;
 	if(identity==1){
-		rwx = permission/100
+		rwx = permission/100;
 	} else if(identity==2){
-		rwx = (permission % 100)/10
+		rwx = (permission % 100)/10;
 	} else if(identity==3){
-		rwx = (permission % 10)
+		rwx = (permission % 10);
 	}
 	if(binary==1){
 		int binrwx=0;
-		for (c = 2; c >= 0; c--)
+		for (int c = 2; c >= 0; c--)
 		{
-			int k = rwx >> c;
+                        int k = rwx % 2;
+			rwx = rwx >> c;
 			int product = 1;
 			for(int i=1;i<=c;i++){
 				product*=10;
 			}
-			if (k & 1)
+			if (k)
 				binrwx+=1*product;
 		}
 		return binrwx;
