@@ -497,3 +497,74 @@ sys_getcwd(void) {
       return -1;
   return traversal(path, n, myproc()->cwd);
 }
+int
+sys_chmod(void)
+{
+  struct inode *id;
+  char *path;
+  int mod;
+  int user_id;
+
+  user_id = getuid();
+  begin_op();
+  if(argstr(0, &path) < 0 || argint(1, &mod) < 0){
+    end_op();
+    return -1;
+  }
+  if((id = namei(path))==0){
+    end_op();
+    return -2;
+  }
+  if(mod<100 || mod > 777)
+  {
+    end_op();
+    return -3;
+  }
+  ilock(id);
+  if(id->owner != user_id)
+  {
+    iupdate(id);
+    iunlockput(id);
+    end_op();
+    return -4;
+  }
+  id->permission = mod;
+  iupdate(id);
+  iunlockput(id);
+  end_op();
+  return mod;
+}
+
+// identity must be 1/2/3, user:1, group:2, other:3
+// binary must be 0 or 1, decide return format
+// ex: when binary is 0, return 7,else return 111
+int
+checkPermission(const struct inode *id, int identity, int binary)
+{
+	int rwx=-1;
+	int permission = id->permission;
+	if(identity==1){
+		rwx = permission/100;
+	} else if(identity==2){
+		rwx = (permission % 100)/10;
+	} else if(identity==3){
+		rwx = (permission % 10);
+	}
+	if(binary==1){
+		int binrwx=0;
+		for (int c = 2; c >= 0; c--)
+		{
+                        int k = rwx % 2;
+			rwx = rwx >> c;
+			int product = 1;
+			for(int i=1;i<=c;i++){
+				product*=10;
+			}
+			if (k)
+				binrwx+=1*product;
+		}
+		return binrwx;
+	} else {
+		return rwx;
+	}
+}

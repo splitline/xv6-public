@@ -110,6 +110,7 @@ extern int sys_getuid(void);
 
 extern int sys_getcwd(void);
 
+extern int sys_chmod(void);
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
 [SYS_exit]    sys_exit,
@@ -138,6 +139,7 @@ static int (*syscalls[])(void) = {
 [SYS_getuid]  sys_getuid,
 
 [SYS_getcwd]  sys_getcwd,
+[SYS_chmod]   sys_chmod,
 };
 
 void

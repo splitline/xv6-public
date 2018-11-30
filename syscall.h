@@ -26,3 +26,4 @@
 #define SYS_getuid 24
 
 #define SYS_getcwd 25
+#define SYS_chmod  26

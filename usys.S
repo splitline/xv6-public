@@ -35,3 +35,4 @@ SYSCALL(setuid)
 SYSCALL(getuid)
 
 SYSCALL(getcwd)
+SYSCALL(chmod)

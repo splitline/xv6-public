@@ -30,6 +30,7 @@ int setuid(int);
 int getuid(void);
 // int getuid(void);
 int getcwd(void*, int); 
+int chmod(char*,int);
 
 // ulib.c
 int stat(const char*, struct stat*);
