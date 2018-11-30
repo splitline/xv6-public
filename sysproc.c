@@ -91,6 +91,12 @@ sys_uptime(void)
 }
 
 int
+sys_ps(void)
+{
+  return ps();
+}
+
+int
 sys_setuid(void)
 {
   uint uargv;
@@ -101,3 +107,4 @@ sys_setuid(void)
   }
   return -1;
 }
+
