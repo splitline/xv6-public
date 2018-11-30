@@ -24,3 +24,4 @@
 #define SYS_ps     22
 #define SYS_setuid 23
 #define SYS_getuid 24
+#define SYS_chmod  25

@@ -443,3 +443,41 @@ sys_pipe(void)
   fd[1] = fd1;
   return 0;
 }
+
+int
+sys_chmod(void)
+{
+  struct inode *id;
+  char *path;
+  int mod;
+  int user_id;
+
+  user_id = getuid();
+  begin_op();
+  if(argstr(0, &path) < 0 || argint(1, &mod) < 0){
+    end_op();
+    return -1;
+  }
+  if((id = namei(path))==0){
+    end_op();
+    return -2;
+  }
+  if(mod<100 || mod > 777)
+  {
+    end_op();
+    return -3;
+  }
+  ilock(id);
+  if(id->owner != user_id)
+  {
+    iupdate(id);
+    iunlockput(id);
+    end_op();
+    return -4;
+  }
+  id->permission = mod;
+  iupdate(id);
+  iunlockput(id);
+  end_op();
+  return mod;
+}
