@@ -4,6 +4,7 @@
 
 int main()
 {
+    printf(1, "Your uid: %d\n", getuid());
     ps();
     wait();
     exit();

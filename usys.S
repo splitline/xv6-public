@@ -32,3 +32,4 @@ SYSCALL(uptime)
 
 SYSCALL(ps)
 SYSCALL(setuid)
+SYSCALL(getuid)

@@ -551,11 +551,17 @@ ps(void)
     }
     else if(p->state == RUNNABLE)
     {
-      cprintf("%d\t%d\t\t %s \t %d \t RUNNABLE\n",p->gid,p->uid,p->name,p->pid);
+      cprintf("%d\t%d\t\t %s \t %d \t RUNNABLE\n",p->uid,p->gid,p->name,p->pid);
     }
   }
   release(&ptable.lock);
   cprintf("\n");
 
   return 22;
+}
+
+int
+getuid(void)
+{
+  return myproc()->uid;
 }

@@ -27,7 +27,7 @@ int uptime(void);
 int ps(void);
 int setuid(int);
 // int setgid(int);
-// int getuid(void);
+int getuid(void);
 // int getuid(void);
 
 // ulib.c

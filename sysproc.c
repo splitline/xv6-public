@@ -108,3 +108,9 @@ sys_setuid(void)
   return -1;
 }
 
+int
+sys_getuid(void)
+{
+  return getuid();
+}
+

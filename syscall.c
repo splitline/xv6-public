@@ -106,6 +106,7 @@ extern int sys_uptime(void);
 
 extern int sys_ps(void);
 extern int sys_setuid(void);
+extern int sys_getuid(void);
 
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
@@ -132,6 +133,7 @@ static int (*syscalls[])(void) = {
 
 [SYS_ps]      sys_ps,
 [SYS_setuid]  sys_setuid,
+[SYS_getuid]  sys_getuid,
 };
 
 void
@@ -149,3 +151,4 @@ syscall(void)
     curproc->tf->eax = -1;
   }
 }
+

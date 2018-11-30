@@ -124,7 +124,7 @@ void            yield(void);
 int             ps(void);
 int             setuid(int);
 // int             setgid(int);
-// int             getuid(void);
+int             getuid(void);
 // int             getgid(void);
 
 // swtch.S

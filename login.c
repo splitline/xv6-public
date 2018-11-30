@@ -40,7 +40,6 @@ int check(char* username, char* password)
                     id *= 10;
                     id += id_tmp[i] - '0';
                 }
-                // printf(2, "uid = %d gid = %d\n", setuid(id, mod), setgid(id, mod));
                 return id;
             }
         }
