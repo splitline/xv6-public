@@ -554,7 +554,7 @@ checkPermission(const struct inode *id, int identity, int binary)
 		int binrwx=0;
 		for (int c = 2; c >= 0; c--)
 		{
-                        int k = rwx % 2;
+      int k = rwx % 2;
 			rwx = rwx >> c;
 			int product = 1;
 			for(int i=1;i<=c;i++){

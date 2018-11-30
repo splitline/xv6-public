@@ -207,6 +207,9 @@ ialloc(uint dev, short type)
     if(dip->type == 0){  // a free inode
       memset(dip, 0, sizeof(*dip));
       dip->type = type;
+      dip->permission = 700;
+      dip->owner = 0;
+      dip->group = 0;
       log_write(bp);   // mark it allocated on the disk
       brelse(bp);
       return iget(dev, inum);
