@@ -543,11 +543,11 @@ ps(void)
   {
     if(p->state == SLEEPING)
     {
-      cprintf("%d\t%d\t\t %s \t %d \t SLEEPING\n",p->gid,p->uid,p->name,p->pid);
+      cprintf("%d\t%d\t\t %s \t %d \t SLEEPING\n",p->uid,p->gid,p->name,p->pid);
     }
     else if(p->state == RUNNING)
     {
-      cprintf("%d\t%d\t\t %s \t %d \t RUNNING\n",p->gid,p->uid,p->name,p->pid);
+      cprintf("%d\t%d\t\t %s \t %d \t RUNNING\n",p->uid,p->gid,p->name,p->pid);
     }
     else if(p->state == RUNNABLE)
     {
