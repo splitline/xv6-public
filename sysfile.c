@@ -265,6 +265,7 @@ create(char *path, short type, short major, short minor)
   ip->major = major;
   ip->minor = minor;
   ip->nlink = 1;
+  ip->owner = getuid();
   iupdate(ip);
 
   if(type == T_DIR){  // Create . and .. entries.
@@ -511,7 +512,8 @@ sys_chmod(void)
     end_op();
     return -1;
   }
-  if((id = namei(path))==0){
+
+  if((id = namei(path)) == 0){
     end_op();
     return -2;
   }
@@ -521,7 +523,7 @@ sys_chmod(void)
     return -3;
   }
   ilock(id);
-  if(id->owner != user_id)
+  if(id->owner != user_id || user_id == 0 )
   {
     iupdate(id);
     iunlockput(id);

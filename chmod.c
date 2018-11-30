@@ -7,7 +7,7 @@ main(int argc, char *argv[])
     int flag = 0;
     if(argc > 3)
     {
-        printf(2,"chmod: too much arguments\n");
+        printf(2,"chmod: too many arguments\n");
         exit();
     }
     if(argc < 3)
