@@ -41,7 +41,7 @@ int check(char* username, char* password)
                     id += id_tmp[i] - '0';
                 }
                 // printf(2, "uid = %d gid = %d\n", setuid(id, mod), setgid(id, mod));
-                return 1;
+                return id;
             }
         }
         close(fd);
@@ -77,7 +77,8 @@ int main(void)
         dup(0); // stdout
         dup(0); // stderr
 
-        if (check(username, password)) {
+        int uid = -1;
+        if ((uid = check(username, password))) {
             printf(1, "[+] Login suceesfully.\n");
 
             int pid = fork();
@@ -86,12 +87,14 @@ int main(void)
                 exit();
             }
             if(pid == 0){
+                setuid(uid);
                 printf(1, "Hello, %s.\n", username);
                 exec("sh", argv);
                 printf(1, "login: exec sh failed\n");
                 exit();
             }
             wait();
+            
             printf(1, "Goodbye %s.\n", username); 
         } else {
             printf(1, "[x] Login failed.\n");

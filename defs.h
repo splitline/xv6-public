@@ -121,6 +121,11 @@ int             wait(void);
 void            wakeup(void*);
 void            yield(void);
 
+int             setuid(int);
+// int             setgid(int);
+// int             getuid(void);
+// int             getgid(void);
+
 // swtch.S
 void            swtch(struct context**, struct context*);
 
