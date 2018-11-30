@@ -125,6 +125,9 @@ kernel: $(OBJS) entry.o entryother initcode kernel.ld
 	$(OBJDUMP) -S kernel > kernel.asm
 	$(OBJDUMP) -t kernel | sed '1,/SYMBOL TABLE/d; s/ .* / /; /^$$/d' > kernel.sym
 
+sha256: sha256.o
+	$(CC) $(CFLAGS) -c sha256.c
+
 # kernelmemfs is a copy of kernel that maintains the
 # disk image in memory instead of writing to a disk.
 # This is not so useful for testing persistent storage or
@@ -143,7 +146,7 @@ tags: $(OBJS) entryother.S _init
 vectors.S: vectors.pl
 	./vectors.pl > vectors.S
 
-ULIB = ulib.o usys.o printf.o umalloc.o
+ULIB = ulib.o usys.o printf.o umalloc.o sha256.o
 
 _%: %.o $(ULIB)
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $@ $^
@@ -181,9 +184,10 @@ UPROGS=\
 	_usertests\
 	_wc\
 	_zombie\
+	_login\
 
-fs.img: mkfs README $(UPROGS)
-	./mkfs fs.img README $(UPROGS)
+fs.img: mkfs passwd README $(UPROGS)
+	./mkfs fs.img passwd README $(UPROGS)
 
 -include *.d
 
