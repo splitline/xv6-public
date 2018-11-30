@@ -13,10 +13,8 @@ int check(char* username, char* password)
     if (password[strlen(password) - 1] == '\n')
         password[strlen(password) - 1] = '\0';
 
-
     int fd;
     if ((fd = open("/passwd", O_RDONLY)) < 0) {
-        // printf(1, "fd = %d\n", fd);
         printf(1, "[x] Login: open passwd file failed\n");
         close(fd);
         return 0;
@@ -31,10 +29,7 @@ int check(char* username, char* password)
 
             char* hash_pass = hashPasswd(password);
             if (!strcmp(username, user_tmp) && !strcmp(hash_pass, pass_tmp)) {
-                // if (write(writefd, id_tmp, sizeof(AID)) <= 0)
-                //     printf(1, "error\n");
                 int now = 0, id = 0;
-                // int mod = 0;
 
                 for (int i = 0; id_tmp[i] != ';' && id_tmp[i] != '\0'; i++, now++) {
                     id *= 10;
@@ -45,7 +40,7 @@ int check(char* username, char* password)
         }
         close(fd);
     }
-    return 0;
+    return -1;
 }
 
 int main(void)
@@ -60,7 +55,6 @@ int main(void)
     printf(1, "　　　　　　　　 丶 ￣ _人'彡ﾉ\n");
     printf(1, "　　　　　　　　　ﾉ　　r'十ヽ/\n\n\n");
     printf(1, "[*] Meow! Time to login!\n");
-    char* argv[] = { "sh", 0 };
 
     while (1) {
         char *username, *password;
@@ -77,7 +71,7 @@ int main(void)
         dup(0); // stderr
 
         int uid = -1;
-        if ((uid = check(username, password))) {
+        if ((uid = check(username, password)) >= 0) {
             printf(1, "[+] Login suceesfully.\n");
 
             int pid = fork();
@@ -88,6 +82,7 @@ int main(void)
             if(pid == 0){
                 setuid(uid);
                 printf(1, "Hello, %s.\n", username);
+                char* argv[] = { "sh", 0 };
                 exec("sh", argv);
                 printf(1, "login: exec sh failed\n");
                 exit();
