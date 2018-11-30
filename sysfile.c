@@ -443,3 +443,57 @@ sys_pipe(void)
   fd[1] = fd1;
   return 0;
 }
+
+#define PATH_SEPARATOR   '/'
+
+int 
+traversal(char* path, int n, struct inode *cwd) {
+  int offset;
+  struct inode *parent;
+  char node_name[DIRSIZ];
+
+  // root
+  if (cwd->inum == namei("/") -> inum) {
+      path[0] = PATH_SEPARATOR;
+      return 1;
+  } else if (cwd->type == T_DIR) {
+    parent = dirlookup(cwd, "..", 0);
+    ilock(parent);
+
+    int dirEntry;
+    struct dirent de;
+    for (dirEntry = 0; dirEntry < parent->size; dirEntry += sizeof(de)) {
+      int n = readi(parent, (char*)&de, dirEntry, sizeof(de));
+      if (n != sizeof(de)) panic("cwd: couldn't read dir");
+      if (de.inum == cwd -> inum) {
+          safestrcpy(node_name, de.name, DIRSIZ);
+          break;
+      }
+    }
+    if(dirEntry >= parent -> size)
+      panic("cwd: this inode no parent QQ");
+    
+    offset = traversal(path, n, parent);
+    safestrcpy(path + offset, node_name, n - offset);
+    offset += strlen(node_name);
+    if (offset == n - 1) {
+        path[offset] = '\0';
+        return n;
+    } else {
+        path[offset++] = PATH_SEPARATOR;
+    }
+    iunlockput(parent);
+    return offset;
+  } else {
+    panic("cwd: Not dir");
+  }
+}
+
+int
+sys_getcwd(void) {
+  char *path;
+  int n;
+  if(argint(1, &n) < 0 || argptr(0, &path, n) < 0)
+      return -1;
+  return traversal(path, n, myproc()->cwd);
+}

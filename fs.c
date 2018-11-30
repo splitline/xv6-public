@@ -21,6 +21,8 @@
 #include "buf.h"
 #include "file.h"
 
+#include "fcntl.h"
+
 #define min(a, b) ((a) < (b) ? (a) : (b))
 static void itrunc(struct inode*);
 // there should be one superblock per disk device, but we run with

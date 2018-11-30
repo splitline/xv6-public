@@ -50,6 +50,8 @@ struct proc {
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
 
+  char cwd_path[255];
+
   int uid;
   int gid;
 };

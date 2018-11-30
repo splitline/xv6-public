@@ -108,6 +108,8 @@ extern int sys_ps(void);
 extern int sys_setuid(void);
 extern int sys_getuid(void);
 
+extern int sys_getcwd(void);
+
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
 [SYS_exit]    sys_exit,
@@ -134,6 +136,8 @@ static int (*syscalls[])(void) = {
 [SYS_ps]      sys_ps,
 [SYS_setuid]  sys_setuid,
 [SYS_getuid]  sys_getuid,
+
+[SYS_getcwd]  sys_getcwd,
 };
 
 void
@@ -151,4 +155,3 @@ syscall(void)
     curproc->tf->eax = -1;
   }
 }
-

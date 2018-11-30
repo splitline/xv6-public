@@ -33,3 +33,5 @@ SYSCALL(uptime)
 SYSCALL(ps)
 SYSCALL(setuid)
 SYSCALL(getuid)
+
+SYSCALL(getcwd)

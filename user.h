@@ -29,6 +29,7 @@ int setuid(int);
 // int setgid(int);
 int getuid(void);
 // int getuid(void);
+int getcwd(void*, int); 
 
 // ulib.c
 int stat(const char*, struct stat*);
