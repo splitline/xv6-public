@@ -96,8 +96,20 @@ filestat(struct file *f, struct stat *st)
 int
 fileread(struct file *f, char *addr, int n)
 {
+  struct inode *id = f->ip;
+  if(getuid()==id->owner){
+    if(checkPermission(id, 1, 0) >> 2 & 0) {
+        printf(1, "permission denied.");
+        exit(1);
+    }
+  } else {
+    if(checkPermission(id, 3, 0) >> 2 & 0) {
+        printf(1, "permission denied.");
+        exit(1);
+    }
+  }
+  // 
   int r;
-
   if(f->readable == 0)
     return -1;
   if(f->type == FD_PIPE)
@@ -117,8 +129,22 @@ fileread(struct file *f, char *addr, int n)
 int
 filewrite(struct file *f, char *addr, int n)
 {
-  int r;
+  struct inode *id = f->ip;
+  if(getuid()==id->owner){
+    if(checkPermission(id, 1, 0) >> 1 & 0) {
+        printf(1, "permission denied.");
+        exit(1);
+    }
+  } else {
+    if(checkPermission(id, 3, 0) >> 1 & 0) {
+        printf(1, "permission denied.");
+        exit(1);
+    }
+  }
 
+  //
+
+  int r;
   if(f->writable == 0)
     return -1;
   if(f->type == FD_PIPE)

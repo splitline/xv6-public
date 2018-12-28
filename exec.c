@@ -6,6 +6,7 @@
 #include "defs.h"
 #include "x86.h"
 #include "elf.h"
+#include "fs.h"
 
 int
 exec(char *path, char **argv)
@@ -26,6 +27,20 @@ exec(char *path, char **argv)
     cprintf("exec: fail\n");
     return -1;
   }
+
+  //
+  if(getuid()==ip->owner){
+    if(checkPermission(ip, 1, 0) >> 0 & 0) {
+        printf(1, "permission denied.");
+        exit(1);
+    }
+  } else {
+    if(checkPermission(ip, 3, 0) >> 0 & 0) {
+        printf(1, "permission denied.");
+        exit(1);
+    }
+  }
+  //
   ilock(ip);
   pgdir = 0;
 
