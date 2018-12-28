@@ -76,4 +76,5 @@ int main(void)
         printf(1, "You can't be a power ranger :(\n");
     }
     
+    exit();
 }

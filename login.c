@@ -31,48 +31,12 @@ int checkID(char* cardID, char* username)
                     id *= 10;
                     id += id_tmp[i] - '0';
                 }
+                close(fd);
                 return id;
             }
         }
-        close(fd);
     }
-    return -1;
-}
-
-int check(char* username, char* password)
-{
-    if (username[strlen(username) - 1] == '\n')
-        username[strlen(username) - 1] = '\0';
-    if (password[strlen(password) - 1] == '\n')
-        password[strlen(password) - 1] = '\0';
-
-    int fd;
-    if ((fd = open("/passwd", O_RDONLY)) < 0) {
-        printf(1, "[x] Login: open passwd file failed\n");
-        close(fd);
-        return 0;
-    }
-
-    int n;
-    char buf[512], cid_tmp[BUFSIZE], user_tmp[BUFSIZE], pass_tmp[BUFSIZE], id_tmp[BUFSIZE];
-    while ((n = read(fd, buf, sizeof(buf))) > 0) {
-        for (int i = 0; i < n; ++i) {
-            i = readPasswd(buf, cid_tmp, user_tmp, pass_tmp, id_tmp, n, i);
-            if (i == -1) break;
-
-            char* hash_pass = hashPasswd(password);
-            if (!strcmp(username, user_tmp) && !strcmp(hash_pass, pass_tmp)) {
-                int now = 0, id = 0;
-
-                for (int i = 0; id_tmp[i] != ';' && id_tmp[i] != '\0'; i++, now++) {
-                    id *= 10;
-                    id += id_tmp[i] - '0';
-                }
-                return id;
-            }
-        }
-        close(fd);
-    }
+    close(fd);
     return -1;
 }
 
@@ -152,7 +116,7 @@ int main(void)
             }
             wait();
             
-            printf(1, "Goodbye %s.\n", username); 
+            printf(1, "Goodbye!\n"); 
         } else {
             printf(1, "[x] Login failed.\n");
         }

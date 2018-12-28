@@ -124,3 +124,24 @@ memmove(void *vdst, const void *vsrc, int n)
     *dst++ = *src++;
   return vdst;
 }
+
+char *trim(char *str)
+{
+  char *end;
+
+  // Trim leading space
+  while((unsigned char)*str == ' ' || (unsigned char)*str == '\n' || (unsigned char)*str == '\r') str++;
+
+  if(*str == 0)  // All spaces?
+    return str;
+
+  // Trim trailing space
+  end = str + strlen(str) - 1;
+  while(end > str && ((unsigned char)*end == ' ' || (unsigned char)*end == '\n' || (unsigned char)*end == '\r')) end--;
+
+  // Write new null terminator character
+  end[1] = '\0';
+
+  return str;
+}
+
