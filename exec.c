@@ -38,7 +38,7 @@ exec(char *path, char **argv)
 
   short own = ip -> owner;
 
-  if(getuid() <= 0) { }
+  if(getuid() == 0) { }
   else if(getuid() == own){
     if(!((checkPermission(ip, 1, 0) >> 0) & 1)) {
         iunlockput(ip);

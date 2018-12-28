@@ -10,6 +10,8 @@ struct sleeplock;
 struct stat;
 struct superblock;
 
+#define abs(x)  ( (x<0) ? -x : x )
+
 // bio.c
 void            binit(void);
 struct buf*     bread(uint, uint);

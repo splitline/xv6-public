@@ -2,9 +2,11 @@
 #include "stat.h"
 #include "user.h"
 
+#define abs(x)  ( (x<0) ? -x : x )
+
 int main()
 {
-    printf(1, "Your uid: %d\n", getuid());
+    printf(1, "Your uid: %d\n", abs(getuid()));
     ps();
     wait();
     exit();

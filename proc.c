@@ -540,20 +540,21 @@ ps(void)
 {
   struct proc *p;
   acquire(&ptable.lock);
-  cprintf("UID\tGID\t\t name \t pid \t state \n\n");
+  cprintf("UID\t\tGID\tname\t\tpid\tstate\n\n");
   for(p = ptable.proc; p < &ptable.proc[NPROC]; p++)
   {
+    if(p->uid < 0) cprintf("(*)");
     if(p->state == SLEEPING)
     {
-      cprintf("%d\t%d\t\t %s \t %d \t SLEEPING\n",p->uid,p->gid,p->name,p->pid);
+      cprintf("%d\t\t%d\t%s\t\t%d\tSLEEPING\n",abs(p->uid),p->gid,p->name,p->pid);
     }
     else if(p->state == RUNNING)
     {
-      cprintf("%d\t%d\t\t %s \t %d \t RUNNING\n",p->uid,p->gid,p->name,p->pid);
+      cprintf("%d\t\t%d\t%s\t\t%d\tRUNNING\n",abs(p->uid),p->gid,p->name,p->pid);
     }
     else if(p->state == RUNNABLE)
     {
-      cprintf("%d\t%d\t\t %s \t %d \t RUNNABLE\n",p->uid,p->gid,p->name,p->pid);
+      cprintf("%d\t\t%d\t%s\t\t%d\tRUNNABLE\n",abs(p->uid),p->gid,p->name,p->pid);
     }
   }
   release(&ptable.lock);

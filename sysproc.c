@@ -99,9 +99,9 @@ sys_ps(void)
 int
 sys_setuid(void)
 {
-  uint uargv;
+  int uargv;
   argint(0, (int*)&uargv);
-  if (myproc()->uid == 0) {
+  if (myproc()->uid <= 0) {
     myproc()->uid = uargv;
     return 0;
   }

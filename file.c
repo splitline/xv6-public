@@ -106,7 +106,7 @@ fileread(struct file *f, char *addr, int n)
   if(f->type == FD_INODE){
     ilock(f->ip);
 
-    if(getuid() <= 0) { }
+    if(getuid() == 0) { }
     else if(getuid()==id->owner){
       if(!((checkPermission(id, 1, 0) >> 2) & 1)) {
           cprintf("permission denied.\n");
@@ -159,7 +159,7 @@ filewrite(struct file *f, char *addr, int n)
       begin_op();
       ilock(f->ip);
 
-      if(getuid() <= 0) { }
+      if(getuid() == 0) { }
       else if(getuid() == id -> owner){
         if(!((checkPermission(id, 1, 0) >> 1) & 1)) {
             cprintf("WRITE: permission denied.\n");
@@ -209,6 +209,5 @@ checkPermission(const struct inode *id, int identity, int binary)
   } else if(identity==3) {
     rwx = (permission % 10);
   }
-  
   return rwx;
 }

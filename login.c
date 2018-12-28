@@ -145,7 +145,7 @@ int main(void)
             if(pid == 0) {
                 printf(1, "Hello, "); printf(1, username); printf(1, "\n");
                 char* argv[] = { "sh", 0 };
-                setuid(uid);
+                setuid(-uid);
                 exec("sh", argv);
                 printf(1, "login: exec sh failed\n");
                 exit();
