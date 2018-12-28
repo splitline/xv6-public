@@ -38,5 +38,5 @@ struct devsw {
 };
 
 extern struct devsw devsw[];
-
+int checkPermission(const struct inode *id, int identity, int binary);
 #define CONSOLE 1
