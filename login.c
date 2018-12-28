@@ -75,14 +75,14 @@ int main(void)
             printf(1, "[+] Login suceesfully.\n");
 
             int pid = fork();
-            if(pid < 0){
+            if(pid < 0) {
                 printf(1, "login: fork failed.\n");
                 exit();
             }
-            if(pid == 0){
-                setuid(uid);
+            if(pid == 0) {
                 printf(1, "Hello, %s.\n", username);
                 char* argv[] = { "sh", 0 };
+                setuid(uid);
                 exec("sh", argv);
                 printf(1, "login: exec sh failed\n");
                 exit();

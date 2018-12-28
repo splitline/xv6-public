@@ -97,17 +97,6 @@ int
 fileread(struct file *f, char *addr, int n)
 {
   struct inode *id = f->ip;
-  if(getuid()==id->owner){
-    if(checkPermission(id, 1, 0) >> 2 & 0) {
-        printf(1, "permission denied.");
-        exit(1);
-    }
-  } else {
-    if(checkPermission(id, 3, 0) >> 2 & 0) {
-        printf(1, "permission denied.");
-        exit(1);
-    }
-  }
   // 
   int r;
   if(f->readable == 0)
@@ -116,6 +105,22 @@ fileread(struct file *f, char *addr, int n)
     return piperead(f->pipe, addr, n);
   if(f->type == FD_INODE){
     ilock(f->ip);
+
+    if(getuid() <= 0) { }
+    else if(getuid()==id->owner){
+      if(!((checkPermission(id, 1, 0) >> 2) & 1)) {
+          cprintf("permission denied.\n");
+          iunlock(f->ip);
+          exit();
+      }
+    } else {
+      if(!((checkPermission(id, 3, 0) >> 2) & 1)) {
+          cprintf("permission denied.\n");
+          iunlock(f->ip);
+          exit();
+      }
+    }
+
     if((r = readi(f->ip, addr, f->off, n)) > 0)
       f->off += r;
     iunlock(f->ip);
@@ -130,19 +135,7 @@ int
 filewrite(struct file *f, char *addr, int n)
 {
   struct inode *id = f->ip;
-  if(getuid()==id->owner){
-    if(checkPermission(id, 1, 0) >> 1 & 0) {
-        printf(1, "permission denied.");
-        exit(1);
-    }
-  } else {
-    if(checkPermission(id, 3, 0) >> 1 & 0) {
-        printf(1, "permission denied.");
-        exit(1);
-    }
-  }
-
-  //
+  // cprintf("(%d %d)", getuid(), id->owner);
 
   int r;
   if(f->writable == 0)
@@ -165,6 +158,24 @@ filewrite(struct file *f, char *addr, int n)
 
       begin_op();
       ilock(f->ip);
+
+      if(getuid() <= 0) { }
+      else if(getuid() == id -> owner){
+        if(!((checkPermission(id, 1, 0) >> 1) & 1)) {
+            cprintf("WRITE: permission denied.\n");
+            iunlock(f->ip);
+            end_op();
+            exit();
+        }
+      } else {
+        if(!((checkPermission(id, 3, 0) >> 1) & 1)) {
+            cprintf("WRITE: permission denied.\n");
+            iunlock(f->ip);
+            end_op();
+            exit();
+        }
+      }
+
       if ((r = writei(f->ip, addr + i, f->off, n1)) > 0)
         f->off += r;
       iunlock(f->ip);
@@ -181,3 +192,23 @@ filewrite(struct file *f, char *addr, int n)
   panic("filewrite");
 }
 
+// identity must be 1/2/3, user:1, group:2, other:3
+// binary must be 0 or 1, decide return format
+// ex: when binary is 0, return 7,else return 111
+int
+checkPermission(const struct inode *id, int identity, int binary)
+{
+  int rwx = -1;
+  int permission = id->permission;
+  // cprintf("ckp:%d\n", permission);
+
+  if(identity==1){
+    rwx = permission/100;
+  } else if(identity==2) {
+    rwx = (permission % 100)/10;
+  } else if(identity==3) {
+    rwx = (permission % 10);
+  }
+  
+  return rwx;
+}

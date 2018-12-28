@@ -6,7 +6,12 @@
 #include "defs.h"
 #include "x86.h"
 #include "elf.h"
+
 #include "fs.h"
+
+#include "spinlock.h"
+#include "sleeplock.h"
+#include "file.h"
 
 int
 exec(char *path, char **argv)
@@ -28,21 +33,27 @@ exec(char *path, char **argv)
     return -1;
   }
 
-  //
-  if(getuid()==ip->owner){
-    if(checkPermission(ip, 1, 0) >> 0 & 0) {
-        printf(1, "permission denied.");
-        exit(1);
-    }
-  } else {
-    if(checkPermission(ip, 3, 0) >> 0 & 0) {
-        printf(1, "permission denied.");
-        exit(1);
-    }
-  }
-  //
   ilock(ip);
   pgdir = 0;
+
+  short own = ip -> owner;
+
+  if(getuid() <= 0) { }
+  else if(getuid() == own){
+    if(!((checkPermission(ip, 1, 0) >> 0) & 1)) {
+        iunlockput(ip);
+        end_op();
+        cprintf("permission denied.\n");
+        exit();
+    }
+  } else {
+    if(!((checkPermission(ip, 3, 0) >> 0) & 1)) {
+        iunlockput(ip);
+        end_op();
+        cprintf("permission denied.\n");
+        exit();
+    }
+  }
 
   // Check ELF header
   if(readi(ip, (char*)&elf, 0, sizeof(elf)) != sizeof(elf))

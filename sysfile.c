@@ -523,7 +523,7 @@ sys_chmod(void)
     return -3;
   }
   ilock(id);
-  if(id->owner != user_id || user_id == 0 )
+  if(id->owner != user_id && user_id != 0)
   {
     iupdate(id);
     iunlockput(id);
