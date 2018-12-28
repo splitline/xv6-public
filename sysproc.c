@@ -114,10 +114,3 @@ sys_getuid(void)
   return getuid();
 }
 
-
-
-// int sys_getcwd(void)
-// {
-//   char *addr;
-//   return (int)getcwd(addr);
-// }

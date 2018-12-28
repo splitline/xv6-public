@@ -3,6 +3,8 @@
 #include "defs.h"
 #include "kbd.h"
 
+short input_hidden = 0;
+
 int
 kbdgetc(void)
 {

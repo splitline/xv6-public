@@ -27,3 +27,5 @@
 
 #define SYS_getcwd 25
 #define SYS_chmod  26
+
+#define SYS_swecho 27

@@ -185,6 +185,7 @@ UPROGS=\
 	_wc\
 	_zombie\
 	_login\
+	_adduser\
 	_ps\
 	_pwd\
     _chmod\

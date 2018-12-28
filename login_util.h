@@ -18,9 +18,20 @@ char* hashPasswd(char* pass)
     return hashed;
 }
 
-int readPasswd(char* buf, char* user_tmp, char* pass_tmp, char* uid_tmp, int n, int i)
+int readPasswd(char* buf, char* cid_tmp, char* user_tmp, char* pass_tmp, char* uid_tmp, int n, int i)
 {
     int now = 0;
+    for (; buf[i] != ';' || i == n; i++, now++) {
+        cid_tmp[now] = buf[i];
+    }
+    i++;
+    cid_tmp[now] = '\0';
+    if (i >= n) {
+        printf(1, "Login: Parse passwd error\n");
+        return -1;
+    }
+
+    now = 0;
     for (; buf[i] != ';' || i == n; i++, now++) {
         user_tmp[now] = buf[i];
     }

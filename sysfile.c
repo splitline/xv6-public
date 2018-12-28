@@ -498,6 +498,7 @@ sys_getcwd(void) {
       return -1;
   return traversal(path, n, myproc()->cwd);
 }
+
 int
 sys_chmod(void)
 {
@@ -569,4 +570,11 @@ checkPermission(const struct inode *id, int identity, int binary)
 	} else {
 		return rwx;
 	}
+}
+
+int
+sys_swecho(void)
+{
+  input_hidden = !input_hidden;
+  return 0;
 }

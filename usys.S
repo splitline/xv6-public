@@ -36,3 +36,4 @@ SYSCALL(getuid)
 
 SYSCALL(getcwd)
 SYSCALL(chmod)
+SYSCALL(swecho)
